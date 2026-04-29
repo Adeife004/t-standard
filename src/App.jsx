@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import CustomCursor from './components/CustomCursor'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Services from './components/Services'
@@ -20,7 +21,10 @@ function App() {
 
   return (
     <>
+      <CustomCursor /> {/* ✅ Outside everything — always visible, never affected by opacity */}
+
       {loading && <Preloader onComplete={handleComplete} />}
+
       <div style={{
         transform: revealing ? 'translateY(0)' : 'translateY(60px)',
         opacity: revealing ? 1 : 0,

@@ -1,5 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react'
+import door from '../assets/door4.avif'
+import irongate from '../assets/irongate.avif'
+import ceiling from '../assets/ceiling.avif'
+import wall from '../assets/wall.avif'
+import kitchen3 from '../assets/kitchen3.avif'
+import wardrobe from '../assets/wardrobe.avif'  
+import chair from '../assets/chair.avif'
+import bedframe from '../assets/bedframe3.avif'
 
 const galleryItems = [
   {
@@ -8,7 +16,7 @@ const galleryItems = [
     title: 'Heavy Duty Steel Door',
     description: 'Custom fabricated steel security door with multi point locking system.',
     accent: '#FF6600',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+    image: door
   },
   {
     id: 2,
@@ -16,7 +24,7 @@ const galleryItems = [
     title: 'Iron Frame Gate',
     description: 'Powder coated iron frame gate installed at a residential property in Lagos.',
     accent: '#FF6600',
-    image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80',
+    image: irongate,
   },
   {
     id: 3,
@@ -24,7 +32,7 @@ const galleryItems = [
     title: 'POP Ceiling Design',
     description: 'Elegant POP ceiling with recessed lighting for a luxury living room.',
     accent: '#0066CC',
-    image: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80',
+    image: ceiling,
   },
   {
     id: 4,
@@ -32,7 +40,7 @@ const galleryItems = [
     title: 'Wall Texture Finish',
     description: 'Premium textured wall finish applied throughout a 4 bedroom duplex.',
     accent: '#0066CC',
-    image: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?w=800&q=80',
+    image: wall,
   },
   {
     id: 5,
@@ -40,7 +48,7 @@ const galleryItems = [
     title: 'Modern Kitchen Cabinet',
     description: 'Full MDF kitchen cabinet set with soft close hinges and granite countertop.',
     accent: '#FF6600',
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+    image: kitchen3,
   },
   {
     id: 6,
@@ -48,27 +56,27 @@ const galleryItems = [
     title: 'Built In Wardrobe',
     description: 'Floor to ceiling built in wardrobe with custom compartments and sliding doors.',
     accent: '#FF6600',
-    image: 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&q=80',
+    image: wardrobe,
   },
   {
     id: 7,
-    category: 'Security Doors',
-    title: 'Commercial Security Door',
-    description: 'Reinforced commercial grade security door for an office complex in Ikeja.',
+    category: 'Luxury Chair', 
+    title: 'Custom Luxury Chair',
+    description: 'Handcrafted upholstered luxury chair built to order for a residential client in Lagos.',
     accent: '#FF6600',
-    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&q=80',
+    image: chair,
   },
   {
     id: 8,
-    category: 'Interior Finishing',
-    title: 'Exterior Cladding',
-    description: 'Stone effect exterior cladding that transformed a dated building facade.',
+    category: 'Bed Frame', 
+    title: 'Bespoke Bed Frame',
+    description: 'Custom built solid wood bed frame with upholstered headboard and premium finish.',
     accent: '#0066CC',
-    image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
+    image: bedframe,
   },
 ]
 
-const categories = ['All', 'Security Doors', 'Interior Finishing', 'Kitchen', 'Wardrobe']
+const categories = ['All', 'Security Doors', 'Interior Finishing', 'Kitchen', 'Wardrobe', 'Luxury Chair', 'Bed Frame']
 
 const GalleryCard = ({ item, index, onClick, isMobile }) => {
   const [hovered, setHovered] = useState(false)

@@ -1,308 +1,196 @@
-import { useState, useEffect } from 'react'
-import { ArrowRight, ChevronDown, Shield, Star, Award } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { ArrowRight, ChevronDown, Shield, Paintbrush, ChefHat, GraduationCap } from 'lucide-react'
 
-const Hero = () => {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [animating, setAnimating] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [isTablet, setIsTablet] = useState(false)
+import door1 from '../assets/door.avif'
+import door2 from '../assets/door2.avif'
+import chair1 from '../assets/chair.avif'
+import chair2 from '../assets/chair2.avif'
+import chair3 from '../assets/chair3.avif'
+import design1 from '../assets/design.avif'
+import design2 from '../assets/design2.avif'
+import kitchen1 from '../assets/kitchen.avif'
+import kitchen2 from '../assets/kitchen2.avif'
+import kitchen3 from '../assets/kitchen3.avif'
+import wardrobe1 from '../assets/wardrobe.avif'
+import wardrobe2 from '../assets/wardrobe2.avif'
+import wardrobe3 from '../assets/wardrobe3.avif'
+import bedframe1 from '../assets/bedframe.avif'
+import bedframe2 from '../assets/bedframe2.avif'
+import bedframe3 from '../assets/bedframe3.avif'
 
-  const slides = [
-    {
-      tag: 'Security First',
-      headline: 'UNBREAKABLE',
-      subheadline: 'SECURITY DOORS',
-      description: 'Premium steel security doors engineered for maximum protection. Sales, fabrication and professional installation across Lagos.',
-      cta: 'View Security Doors',
-      accent: '#FF6600',
-    },
-    {
-      tag: 'Interior Excellence',
-      headline: 'TRANSFORM',
-      subheadline: 'YOUR SPACE',
-      description: 'Bespoke interior and exterior finishing that turns ordinary spaces into extraordinary living experiences.',
-      cta: 'Explore Finishing',
-      accent: '#FF6600',
-    },
-    {
-      tag: 'Custom Craftsmanship',
-      headline: 'BESPOKE',
-      subheadline: 'KITCHENS & WARDROBES',
-      description: 'Handcrafted kitchens and wardrobes tailored to your exact specifications. Built to last a lifetime.',
-      cta: 'See Our Work',
-      accent: '#FF6600',
-    },
-  ]
-
+const useBreakpoint = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
   useEffect(() => {
-    const check = () => {
-      setIsMobile(window.innerWidth <= 640)
-      setIsTablet(window.innerWidth > 640 && window.innerWidth <= 960)
-    }
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+    const fn = () => setWidth(window.innerWidth)
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
   }, [])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setAnimating(true)
-      setTimeout(() => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length)
-        setAnimating(false)
-      }, 400)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [])
-
-  const goToSlide = (index) => {
-    setAnimating(true)
-    setTimeout(() => {
-      setCurrentSlide(index)
-      setAnimating(false)
-    }, 300)
-  }
-
-  const slide = slides[currentSlide]
-  const isSmall = isMobile || isTablet
-
-  const stats = [
-    { icon: Shield, value: '500+', label: 'Doors Installed' },
-    { icon: Star, value: '10+', label: 'Years Experience' },
-    { icon: Award, value: '100%', label: 'Client Satisfaction' },
-  ]
-
-  return (
-    <section id="home" style={{
-      ...styles.section,
-      paddingTop: isMobile ? '64px' : '72px',
-    }}>
-
-      <div style={styles.gridOverlay} />
-      <div style={styles.diagonalAccent} />
-      {!isMobile && <div style={styles.sideBar} />}
-
-      {/* Main content */}
-      <div style={{
-        ...styles.container,
-        flexDirection: isSmall ? 'column' : 'row',
-        padding: isMobile ? '36px 20px 28px' : isTablet ? '48px 32px 36px' : '60px 48px',
-        gap: isSmall ? '36px' : '60px',
-        alignItems: isSmall ? 'flex-start' : 'center',
-      }}>
-
-        {/* Left Content */}
-        <div style={{
-          ...styles.leftContent,
-          maxWidth: isSmall ? '100%' : '580px',
-        }}>
-
-          {/* Tag pill */}
-          <div style={{
-            ...styles.tagPill,
-            opacity: animating ? 0 : 1,
-            transform: animating ? 'translateY(-10px)' : 'translateY(0)',
-            transition: 'all 0.4s ease',
-          }}>
-            <span style={styles.tagDot} />
-            {slide.tag}
-          </div>
-
-          {/* Headline */}
-          <div style={styles.headlineWrap}>
-            <h1 style={{
-              ...styles.headline,
-              fontSize: isMobile ? '64px' : isTablet ? '80px' : 'clamp(60px, 8vw, 100px)',
-              opacity: animating ? 0 : 1,
-              transform: animating ? 'translateX(-30px)' : 'translateX(0)',
-              transition: 'all 0.4s ease 0.05s',
-            }}>
-              {slide.headline}
-            </h1>
-            <h2 style={{
-              ...styles.subheadline,
-              fontSize: isMobile ? '36px' : isTablet ? '48px' : 'clamp(40px, 5vw, 64px)',
-              opacity: animating ? 0 : 1,
-              transform: animating ? 'translateX(-30px)' : 'translateX(0)',
-              transition: 'all 0.4s ease 0.1s',
-            }}>
-              {slide.subheadline}
-            </h2>
-          </div>
-
-          {/* Description */}
-          <p style={{
-            ...styles.description,
-            fontSize: isMobile ? '14px' : '16px',
-            opacity: animating ? 0 : 1,
-            transform: animating ? 'translateY(10px)' : 'translateY(0)',
-            transition: 'all 0.4s ease 0.15s',
-          }}>
-            {slide.description}
-          </p>
-
-          {/* CTA Buttons */}
-          <div style={{
-            ...styles.ctaRow,
-            flexDirection: isMobile ? 'column' : 'row',
-            opacity: animating ? 0 : 1,
-            transition: 'all 0.4s ease 0.2s',
-          }}>
-            <HoverButton href="#services" primary fullWidth={isMobile}>
-              {slide.cta} <ArrowRight size={16} />
-            </HoverButton>
-            <HoverButton href="#contact" primary={false} fullWidth={isMobile}>
-              Get Free Quote
-            </HoverButton>
-          </div>
-
-          {/* Location badge */}
-          <div style={styles.locationBadge}>
-            <span style={styles.locationDot} />
-            <span style={{ ...styles.locationText, fontSize: isMobile ? '11px' : '12px' }}>
-              Isheri-Oshun, Lagos. Serving all of Nigeria
-            </span>
-          </div>
-
-        </div>
-
-        {/* Right Visual Panel — hidden on mobile, shown on tablet+ */}
-        {!isMobile && (
-          <div style={{
-            ...styles.rightPanel,
-            flex: isTablet ? '0 0 280px' : '0 0 380px',
-            alignSelf: isTablet ? 'center' : 'auto',
-          }}>
-            <div style={styles.bigNumber}>0{currentSlide + 1}</div>
-
-            <div style={{
-              ...styles.cardStack,
-              width: isTablet ? '260px' : '320px',
-              height: isTablet ? '320px' : '380px',
-            }}>
-              <div style={styles.cardBehind2} />
-              <div style={styles.cardBehind1} />
-              <div style={styles.cardFront}>
-                <div style={styles.cardInner}>
-                  <div style={styles.cardIcon}>
-                    {currentSlide === 0 && <Shield size={isTablet ? 36 : 48} color="#FF6600" />}
-                    {currentSlide === 1 && <Star size={isTablet ? 36 : 48} color="#FF6600" />}
-                    {currentSlide === 2 && <Award size={isTablet ? 36 : 48} color="#FF6600" />}
-                  </div>
-                  <div style={styles.cardLabel}>T-STANDARD</div>
-                  <div style={styles.cardSublabel}>Lagos, Nigeria</div>
-                  <div style={styles.cardDivider} />
-                  <div style={styles.cardService}>{slide.subheadline}</div>
-                  <div style={styles.cardPhone}>+234 (0) 802 767 1663</div>
-                </div>
-              </div>
-            </div>
-
-            <div style={styles.dotsRow}>
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goToSlide(i)}
-                  style={{
-                    ...styles.dot,
-                    width: i === currentSlide ? '32px' : '8px',
-                    backgroundColor: i === currentSlide ? '#FF6600' : 'rgba(255,255,255,0.3)',
-                    transition: 'all 0.3s ease',
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Mobile slide dots (shown only on mobile, inline with content) */}
-        {isMobile && (
-          <div style={{ ...styles.dotsRow, marginTop: '-8px' }}>
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goToSlide(i)}
-                style={{
-                  ...styles.dot,
-                  width: i === currentSlide ? '32px' : '8px',
-                  backgroundColor: i === currentSlide ? '#FF6600' : 'rgba(255,255,255,0.3)',
-                  transition: 'all 0.3s ease',
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-      </div>
-
-      {/* Stats bar */}
-      <div style={{
-        ...styles.statsBar,
-        padding: isMobile ? '0 16px' : '0 48px',
-        flexWrap: isMobile ? 'wrap' : 'nowrap',
-      }}>
-        {stats.map((stat, i) => (
-          <StatItem
-            key={i}
-            stat={stat}
-            isMobile={isMobile}
-            style={isMobile ? { flex: '1 1 calc(33% - 8px)', minWidth: '90px' } : {}}
-          />
-        ))}
-      </div>
-
-      {/* Scroll indicator — desktop only */}
-      {!isMobile && (
-        <div style={styles.scrollIndicator}>
-          <span style={styles.scrollText}>Scroll</span>
-          <ChevronDown size={16} color="rgba(255,255,255,0.5)" style={{ animation: 'bounce 1.5s infinite' }} />
-        </div>
-      )}
-
-    </section>
-  )
+  return { isMobile: width <= 640, isTablet: width > 640 && width <= 960 }
 }
+
+const slides = [
+  {
+    tag: 'Security First',
+    headline: 'UNBREAKABLE',
+    subheadline: 'SECURITY DOORS',
+    description: 'Premium steel security doors engineered for maximum protection. Sales, fabrication and professional installation across Lagos.',
+    cta: 'View Security Doors',
+    image: door1,
+  },
+  {
+    tag: 'Security Solutions',
+    headline: 'BUILT TO',
+    subheadline: 'PROTECT',
+    description: 'Heavy gauge steel construction with multi point locking systems. Custom fabricated to any size for homes and offices.',
+    cta: 'View Security Doors',
+    image: door2,
+  },
+  {
+    tag: 'Interior Excellence',
+    headline: 'TRANSFORM',
+    subheadline: 'YOUR SPACE',
+    description: 'Bespoke interior and exterior finishing that turns ordinary spaces into extraordinary living experiences.',
+    cta: 'Explore Finishing',
+    image: design1,
+  },
+  {
+    tag: 'Interior Finishing',
+    headline: 'ELEGANT',
+    subheadline: 'DESIGNS',
+    description: 'Wall textures, POP ceilings, tiling and exterior cladding delivered with precision and attention to detail.',
+    cta: 'Explore Finishing',
+    image: design2,
+  },
+  {
+    tag: 'Luxury Seating',
+    headline: 'PREMIUM',
+    subheadline: 'FURNISHING',
+    description: 'Custom furniture and upholstery solutions crafted to complement every interior style.',
+    cta: 'See Our Work',
+    image: chair1,
+  },
+  {
+    tag: 'Bespoke Seating',
+    headline: 'CRAFTED',
+    subheadline: 'CHAIRS',
+    description: 'From accent chairs to full dining sets — every piece built to your specification and finished to perfection.',
+    cta: 'See Our Work',
+    image: chair2,
+  },
+  {
+    tag: 'Upholstery',
+    headline: 'HAND',
+    subheadline: 'CRAFTED',
+    description: 'Premium fabrics and leathers hand-selected for durability and style. Every stitch placed with care.',
+    cta: 'See Our Work',
+    image: chair3,
+  },
+  {
+    tag: 'Custom Craftsmanship',
+    headline: 'BESPOKE',
+    subheadline: 'KITCHENS',
+    description: 'Handcrafted kitchen cabinets tailored to your exact vision. Built from quality materials to last a lifetime.',
+    cta: 'See Our Work',
+    image: kitchen1,
+  },
+  {
+    tag: 'Kitchen Design',
+    headline: 'MODERN',
+    subheadline: 'KITCHENS',
+    description: 'Sleek layouts and smart storage solutions designed around how you actually cook and live.',
+    cta: 'See Our Work',
+    image: kitchen2,
+  },
+  {
+    tag: 'Custom Units',
+    headline: 'BUILT FOR',
+    subheadline: 'YOUR LIFE',
+    description: 'Every unit is designed around your space and lifestyle. From concept to installation we handle everything.',
+    cta: 'See Our Work',
+    image: kitchen3,
+  },
+  {
+    tag: 'Wardrobe Systems',
+    headline: 'BUILT IN',
+    subheadline: 'WARDROBES',
+    description: 'Floor to ceiling wardrobe systems with custom compartments, soft close drawers and premium finishes.',
+    cta: 'See Our Work',
+    image: wardrobe1,
+  },
+  {
+    tag: 'Walk-In Wardrobes',
+    headline: 'ORGANISED',
+    subheadline: 'IN STYLE',
+    description: 'Transform your bedroom into a luxury dressing room with fully bespoke walk-in wardrobe systems.',
+    cta: 'See Our Work',
+    image: wardrobe2,
+  },
+  {
+    tag: 'Wardrobe Interiors',
+    headline: 'EVERY',
+    subheadline: 'DETAIL',
+    description: 'Soft-close drawers, mirrored panels, LED lighting and custom hanging rails — all built to your exact brief.',
+    cta: 'See Our Work',
+    image: wardrobe3,
+  },
+  {
+    tag: 'Bed Frames',
+    headline: 'SLEEP IN',
+    subheadline: 'LUXURY',
+    description: 'Custom bed frames built for comfort and elegance. Upholstered headboards, solid bases and bespoke sizing.',
+    cta: 'See Our Work',
+    image: bedframe1,
+  },
+  {
+    tag: 'Bed Frames',
+    headline: 'HANDCRAFTED',
+    subheadline: 'BED FRAMES',
+    description: 'Every frame is built to order using quality hardwoods and premium finishes that stand the test of time.',
+    cta: 'See Our Work',
+    image: bedframe2,
+  },
+  {
+    tag: 'Bed Frames',
+    headline: 'CRAFTED',
+    subheadline: 'FOR YOU',
+    description: 'Every unit is designed around your space and lifestyle. From concept to installation we handle everything.',
+    cta: 'See Our Work',
+    image: bedframe3,
+  },
+]
+
+const features = [
+  { icon: Shield, label: 'Quality', sub: 'You Can Trust' },
+  { icon: Paintbrush, label: 'Expert', sub: 'Craftsmanship' },
+  { icon: ChefHat, label: 'Built For', sub: 'Durability' },
+  { icon: GraduationCap, label: 'Vocational', sub: 'Training' },
+]
 
 const HoverButton = ({ href, children, primary, fullWidth }) => {
   const [hovered, setHovered] = useState(false)
-
-  const base = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px',
-    padding: '14px 28px',
-    borderRadius: '2px',
-    textDecoration: 'none',
-    fontSize: '13px',
-    fontWeight: '700',
-    letterSpacing: '1.5px',
-    textTransform: 'uppercase',
-    fontFamily: 'Barlow Condensed, sans-serif',
-    transition: 'all 0.3s ease',
-    width: fullWidth ? '100%' : 'auto',
-  }
-
-  const primaryStyle = {
-    ...base,
-    backgroundColor: hovered ? '#fff' : '#FF6600',
-    color: hovered ? '#FF6600' : '#fff',
-    transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
-    boxShadow: hovered ? '0 12px 30px rgba(255,102,0,0.4)' : 'none',
-  }
-
-  const secondaryStyle = {
-    ...base,
-    backgroundColor: 'transparent',
-    color: hovered ? '#FF6600' : '#fff',
-    border: hovered ? '2px solid #FF6600' : '2px solid rgba(255,255,255,0.4)',
-    transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
-  }
-
   return (
     <a
       href={href}
-      style={primary ? primaryStyle : secondaryStyle}
+      style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        gap: '8px', padding: '14px 28px', borderRadius: '2px',
+        textDecoration: 'none', fontSize: '13px', fontWeight: '700',
+        letterSpacing: '1.5px', textTransform: 'uppercase',
+        fontFamily: 'Barlow Condensed, sans-serif',
+        width: fullWidth ? '100%' : 'auto',
+        transition: 'all 0.3s ease',
+        ...(primary ? {
+          backgroundColor: hovered ? '#fff' : '#FF6600',
+          color: hovered ? '#FF6600' : '#fff',
+          transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
+          boxShadow: hovered ? '0 12px 30px rgba(255,102,0,0.4)' : 'none',
+        } : {
+          backgroundColor: 'transparent',
+          color: hovered ? '#FF6600' : '#fff',
+          border: hovered ? '2px solid #FF6600' : '2px solid rgba(255,255,255,0.4)',
+          transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
+        }),
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -311,329 +199,369 @@ const HoverButton = ({ href, children, primary, fullWidth }) => {
   )
 }
 
-const StatItem = ({ stat, isMobile }) => {
+const FeatureItem = ({ feature, isMobile }) => {
   const [hovered, setHovered] = useState(false)
-  const Icon = stat.icon
-
+  const Icon = feature.icon
   return (
     <div
-      style={{
-        ...styles.statItem,
-        backgroundColor: hovered ? 'rgba(255,102,0,0.15)' : 'transparent',
-        borderColor: hovered ? '#FF6600' : 'rgba(255,255,255,0.1)',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        transition: 'all 0.3s ease',
-        padding: isMobile ? '20px 12px' : '28px 48px',
-        flex: isMobile ? 1 : 'unset',
-      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      style={{
+        flex: 1, display: 'flex', alignItems: 'center',
+        gap: isMobile ? '8px' : '12px',
+        padding: isMobile ? '14px 10px' : '20px 24px',
+        borderRight: '1px solid rgba(255,255,255,0.07)',
+        backgroundColor: hovered ? 'rgba(255,102,0,0.1)' : 'transparent',
+        transition: 'background-color 0.3s ease',
+        cursor: 'default',
+        minWidth: isMobile ? '110px' : 'auto',
+      }}
     >
-      <Icon size={isMobile ? 18 : 22} color={hovered ? '#FF6600' : 'rgba(255,255,255,0.5)'} style={{ transition: 'color 0.3s' }} />
       <div style={{
-        ...styles.statValue,
-        fontSize: isMobile ? '24px' : '32px',
-      }}>{stat.value}</div>
-      <div style={{
-        ...styles.statLabel,
-        fontSize: isMobile ? '9px' : '11px',
-        textAlign: 'center',
-      }}>{stat.label}</div>
+        width: isMobile ? '30px' : '38px',
+        height: isMobile ? '30px' : '38px',
+        borderRadius: '4px', flexShrink: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backgroundColor: hovered ? '#FF6600' : 'rgba(255,102,0,0.15)',
+        transition: 'background-color 0.3s ease',
+      }}>
+        <Icon size={isMobile ? 15 : 18} color={hovered ? '#fff' : '#FF6600'} style={{ transition: 'color 0.3s' }} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+        <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: isMobile ? '12px' : '14px', fontWeight: '700', color: '#FF6600', letterSpacing: '1px', textTransform: 'uppercase', lineHeight: 1 }}>
+          {feature.label}
+        </span>
+        <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: isMobile ? '11px' : '13px', fontWeight: '600', color: 'rgba(255,255,255,0.8)', letterSpacing: '0.5px', textTransform: 'uppercase', lineHeight: 1, marginTop: '2px' }}>
+          {feature.sub}
+        </span>
+      </div>
     </div>
   )
 }
 
-const styles = {
-  section: {
-    minHeight: '100vh',
-    backgroundColor: '#001845',
-    position: 'relative',
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  gridOverlay: {
-    position: 'absolute',
-    inset: 0,
-    backgroundImage: `
-      linear-gradient(rgba(255,102,0,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,102,0,0.04) 1px, transparent 1px)
-    `,
-    backgroundSize: '60px 60px',
-    pointerEvents: 'none',
-  },
-  diagonalAccent: {
-    position: 'absolute',
-    top: 0,
-    right: '-10%',
-    width: '55%',
-    height: '100%',
-    background: 'linear-gradient(135deg, rgba(0,53,128,0.8) 0%, rgba(0,24,69,0) 70%)',
-    clipPath: 'polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%)',
-    pointerEvents: 'none',
-  },
-  sideBar: {
-    position: 'absolute',
-    left: 0,
-    top: '20%',
-    width: '4px',
-    height: '60%',
-    background: 'linear-gradient(to bottom, transparent, #FF6600, transparent)',
-    borderRadius: '0 2px 2px 0',
-  },
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    width: '100%',
-    flex: 1,
-  },
-  leftContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
-  },
-  tagPill: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '8px',
-    backgroundColor: 'rgba(255,102,0,0.15)',
-    border: '1px solid rgba(255,102,0,0.3)',
-    color: '#FF6600',
-    padding: '6px 16px',
-    borderRadius: '20px',
-    fontSize: '11px',
-    fontWeight: '600',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    fontFamily: 'DM Sans, sans-serif',
-    width: 'fit-content',
-  },
-  tagDot: {
-    width: '6px',
-    height: '6px',
-    borderRadius: '50%',
-    backgroundColor: '#FF6600',
-    boxShadow: '0 0 8px #FF6600',
-    display: 'block',
-    animation: 'pulse 2s infinite',
-  },
-  headlineWrap: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0px',
-  },
-  headline: {
-    fontFamily: 'Barlow Condensed, sans-serif',
-    fontWeight: '800',
-    color: '#FF6600',
-    lineHeight: 0.9,
-    letterSpacing: '-2px',
-  },
-  subheadline: {
-    fontFamily: 'Barlow Condensed, sans-serif',
-    fontWeight: '700',
-    color: '#ffffff',
-    lineHeight: 1,
-    letterSpacing: '2px',
-  },
-  description: {
-    color: 'rgba(255,255,255,0.65)',
-    lineHeight: 1.7,
-    fontFamily: 'DM Sans, sans-serif',
-    maxWidth: '480px',
-    fontWeight: '300',
-  },
-  ctaRow: {
-    display: 'flex',
-    gap: '16px',
-  },
-  locationBadge: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    marginTop: '4px',
-  },
-  locationDot: {
-    width: '8px',
-    height: '8px',
-    borderRadius: '50%',
-    backgroundColor: '#FF6600',
-    display: 'block',
-    flexShrink: 0,
-  },
-  locationText: {
-    color: 'rgba(255,255,255,0.4)',
-    letterSpacing: '1px',
-    fontFamily: 'DM Sans, sans-serif',
-  },
-  rightPanel: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '24px',
-    position: 'relative',
-  },
-  bigNumber: {
-    position: 'absolute',
-    top: '-20px',
-    right: '-20px',
-    fontFamily: 'Barlow Condensed, sans-serif',
-    fontSize: '160px',
-    fontWeight: '800',
-    color: 'rgba(255,102,0,0.06)',
-    lineHeight: 1,
-    pointerEvents: 'none',
-    userSelect: 'none',
-  },
-  cardStack: {
-    position: 'relative',
-  },
-  cardBehind2: {
-    position: 'absolute',
-    top: '16px',
-    left: '16px',
-    right: '-16px',
-    bottom: '-16px',
-    backgroundColor: 'rgba(255,102,0,0.08)',
-    borderRadius: '4px',
-    border: '1px solid rgba(255,102,0,0.15)',
-  },
-  cardBehind1: {
-    position: 'absolute',
-    top: '8px',
-    left: '8px',
-    right: '-8px',
-    bottom: '-8px',
-    backgroundColor: 'rgba(0,53,128,0.6)',
-    borderRadius: '4px',
-    border: '1px solid rgba(255,255,255,0.08)',
-  },
-  cardFront: {
-    position: 'absolute',
-    inset: 0,
-    backgroundColor: '#002a6e',
-    borderRadius: '4px',
-    border: '1px solid rgba(255,102,0,0.3)',
-    boxShadow: '0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,102,0,0.1)',
-    overflow: 'hidden',
-  },
-  cardInner: {
-    padding: '32px',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px',
-    textAlign: 'center',
-  },
-  cardIcon: {
-    width: '72px',
-    height: '72px',
-    borderRadius: '50%',
-    backgroundColor: 'rgba(255,102,0,0.1)',
-    border: '2px solid rgba(255,102,0,0.3)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '4px',
-  },
-  cardLabel: {
-    fontFamily: 'Barlow Condensed, sans-serif',
-    fontSize: '22px',
-    fontWeight: '800',
-    color: '#fff',
-    letterSpacing: '3px',
-  },
-  cardSublabel: {
-    fontSize: '11px',
-    color: 'rgba(255,255,255,0.4)',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    fontFamily: 'DM Sans, sans-serif',
-  },
-  cardDivider: {
-    width: '40px',
-    height: '2px',
-    backgroundColor: '#FF6600',
-    margin: '6px 0',
-  },
-  cardService: {
-    fontFamily: 'Barlow Condensed, sans-serif',
-    fontSize: '16px',
-    fontWeight: '700',
-    color: '#FF6600',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    textAlign: 'center',
-  },
-  cardPhone: {
-    fontSize: '12px',
-    color: 'rgba(255,255,255,0.5)',
-    fontFamily: 'DM Sans, sans-serif',
-    marginTop: '6px',
-  },
-  dotsRow: {
-    display: 'flex',
-    gap: '8px',
-    alignItems: 'center',
-    marginTop: '8px',
-  },
-  dot: {
-    height: '8px',
-    borderRadius: '4px',
-    border: 'none',
-    cursor: 'pointer',
-    padding: 0,
-  },
-  statsBar: {
-    display: 'flex',
-    justifyContent: 'center',
-    borderTop: '1px solid rgba(255,255,255,0.08)',
-  },
-  statItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '6px',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderTop: 'none',
-    cursor: 'default',
-  },
-  statValue: {
-    fontFamily: 'Barlow Condensed, sans-serif',
-    fontWeight: '800',
-    color: '#fff',
-    lineHeight: 1,
-  },
-  statLabel: {
-    color: 'rgba(255,255,255,0.4)',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    fontFamily: 'DM Sans, sans-serif',
-  },
-  scrollIndicator: {
-    position: 'absolute',
-    bottom: '100px',
-    left: '48px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '4px',
-  },
-  scrollText: {
-    color: 'rgba(255,255,255,0.3)',
-    fontSize: '10px',
-    letterSpacing: '3px',
-    textTransform: 'uppercase',
-    fontFamily: 'DM Sans, sans-serif',
-    writingMode: 'vertical-rl',
-  },
+const Hero = () => {
+  const { isMobile, isTablet } = useBreakpoint()
+  const [current, setCurrent] = useState(0)
+  const [animating, setAnimating] = useState(false)
+
+  // const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 })
+  // const [followerPos, setFollowerPos] = useState({ x: -100, y: -100 })
+  // const targetRef = useRef({ x: -100, y: -100 })
+  // const followerRef = useRef({ x: -100, y: -100 })
+  // const frameRef = useRef(null)
+
+  // useEffect(() => {
+  //   const onMove = (e) => {
+  //     setCursorPos({ x: e.clientX, y: e.clientY })
+  //     targetRef.current = { x: e.clientX, y: e.clientY }
+  //   }
+  //   window.addEventListener('mousemove', onMove)
+  //   const loop = () => {
+  //     followerRef.current.x += (targetRef.current.x - followerRef.current.x) * 0.11
+  //     followerRef.current.y += (targetRef.current.y - followerRef.current.y) * 0.11
+  //     setFollowerPos({ x: followerRef.current.x, y: followerRef.current.y })
+  //     frameRef.current = requestAnimationFrame(loop)
+  //   }
+  //   frameRef.current = requestAnimationFrame(loop)
+  //   return () => {
+  //     window.removeEventListener('mousemove', onMove)
+  //     cancelAnimationFrame(frameRef.current)
+  //   }
+  // }, [])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setAnimating(true)
+      setTimeout(() => {
+        setCurrent(p => (p + 1) % slides.length)
+        setAnimating(false)
+      }, 500)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const goTo = (i) => {
+    if (i === current) return
+    setAnimating(true)
+    setTimeout(() => { setCurrent(i); setAnimating(false) }, 400)
+  }
+
+  const slide = slides[current]
+
+  return (
+    <>
+      <section id="home" style={{
+        minHeight: '100vh',
+        backgroundColor: '#001235',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingTop: isMobile ? '60px' : '72px',
+      }}>
+
+        {/* Grid bg */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: `linear-gradient(rgba(255,102,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,102,0,0.03) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+        }} />
+
+        {/* Left orange bar */}
+        {!isMobile && (
+          <div style={{
+            position: 'absolute', left: 0, top: '20%',
+            width: '3px', height: '60%',
+            background: 'linear-gradient(to bottom, transparent, #FF6600, transparent)',
+            borderRadius: '0 2px 2px 0',
+          }} />
+        )}
+
+        {/* Main row */}
+        <div style={{
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          flex: 1,
+          maxWidth: '1400px',
+          margin: '0 auto',
+          width: '100%',
+          padding: isMobile ? '28px 20px 16px' : isTablet ? '36px 32px' : '36px 48px',
+          gap: isMobile ? '24px' : '0',
+          alignItems: 'stretch',
+        }}>
+
+          {/* LEFT: text content */}
+          <div style={{
+            flex: isMobile ? 'none' : isTablet ? '0 0 48%' : '0 0 44%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            gap: '20px',
+            paddingRight: isMobile ? '0' : isTablet ? '28px' : '52px',
+            position: 'relative',
+            zIndex: 1,
+          }}>
+
+            {/* Logo */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{
+                width: '42px', height: '42px', borderRadius: '50%',
+                backgroundColor: '#FF6600',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 0 20px rgba(255,102,0,0.35)', flexShrink: 0,
+              }}>
+                <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '15px', fontWeight: '900', color: '#fff', letterSpacing: '1px' }}>ts</span>
+              </div>
+              <div>
+                <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '20px', fontWeight: '800', color: '#fff', letterSpacing: '3px', lineHeight: 1 }}>
+                  T-STANDARD
+                </div>
+                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', textTransform: 'uppercase', fontFamily: 'DM Sans, sans-serif', marginTop: '3px' }}>
+                  Security | Interiors | Kitchens
+                </div>
+              </div>
+            </div>
+
+            {/* Tag pill */}
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              backgroundColor: 'rgba(255,102,0,0.12)',
+              border: '1px solid rgba(255,102,0,0.3)',
+              color: '#FF6600', padding: '6px 16px', borderRadius: '20px',
+              fontSize: '11px', fontWeight: '600', letterSpacing: '2px',
+              textTransform: 'uppercase', fontFamily: 'DM Sans, sans-serif',
+              width: 'fit-content',
+              opacity: animating ? 0 : 1,
+              transform: animating ? 'translateY(-8px)' : 'translateY(0)',
+              transition: 'all 0.4s ease',
+            }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#FF6600', display: 'block', boxShadow: '0 0 6px #FF6600', flexShrink: 0, animation: 'pulse 2s infinite' }} />
+              {slide.tag}
+            </div>
+
+            {/* Headline */}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <h1 style={{
+                fontFamily: 'Barlow Condensed, sans-serif',
+                fontSize: isMobile ? '56px' : isTablet ? '68px' : 'clamp(60px, 6vw, 88px)',
+                fontWeight: '800', color: '#FF6600',
+                lineHeight: 0.88, letterSpacing: '-1px', margin: 0,
+                opacity: animating ? 0 : 1,
+                transform: animating ? 'translateX(-20px)' : 'translateX(0)',
+                transition: 'all 0.4s ease 0.05s',
+              }}>{slide.headline}</h1>
+              <h2 style={{
+                fontFamily: 'Barlow Condensed, sans-serif',
+                fontSize: isMobile ? '30px' : isTablet ? '40px' : 'clamp(32px, 3.2vw, 52px)',
+                fontWeight: '700', color: '#fff',
+                lineHeight: 1.05, letterSpacing: '2px', margin: 0,
+                opacity: animating ? 0 : 1,
+                transform: animating ? 'translateX(-20px)' : 'translateX(0)',
+                transition: 'all 0.4s ease 0.1s',
+              }}>{slide.subheadline}</h2>
+            </div>
+
+            {/* Description */}
+            <p style={{
+              color: 'rgba(255,255,255,0.6)',
+              fontSize: isMobile ? '14px' : '15px',
+              lineHeight: 1.75, fontFamily: 'DM Sans, sans-serif', fontWeight: '300',
+              maxWidth: '400px', margin: 0,
+              opacity: animating ? 0 : 1,
+              transition: 'opacity 0.4s ease 0.15s',
+            }}>{slide.description}</p>
+
+            {/* CTAs */}
+            <div style={{
+              display: 'flex', gap: '12px',
+              flexDirection: isMobile ? 'column' : 'row',
+              opacity: animating ? 0 : 1,
+              transition: 'opacity 0.4s ease 0.2s',
+            }}>
+              <HoverButton href="#services" primary fullWidth={isMobile}>
+                {slide.cta} <ArrowRight size={15} />
+              </HoverButton>
+              <HoverButton href="#contact" primary={false} fullWidth={isMobile}>
+                Get Free Quote
+              </HoverButton>
+            </div>
+
+            {/* Location */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#FF6600', display: 'block', flexShrink: 0 }} />
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontFamily: 'DM Sans, sans-serif' }}>
+                  Isheri Oshun, Lagos — Serving all of Nigeria
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'rgba(255,102,0,0.3)', display: 'block', flexShrink: 0 }} />
+                <a href="tel:+2348027671663" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontFamily: 'DM Sans, sans-serif', textDecoration: 'none' }}>
+                  +234 (0) 802 767 1663
+                </a>
+              </div>
+            </div>
+
+            {/* Dots + counter */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                {slides.map((_, i) => (
+                  <button key={i} onClick={() => goTo(i)} style={{
+                    height: '5px',
+                    width: i === current ? '24px' : '5px',
+                    borderRadius: '3px', border: 'none', padding: 0, cursor: 'pointer',
+                    backgroundColor: i === current ? '#FF6600' : 'rgba(255,255,255,0.2)',
+                    transition: 'all 0.3s ease',
+                  }} />
+                ))}
+              </div>
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '2px', whiteSpace: 'nowrap' }}>
+                0{current + 1} / 0{slides.length}
+              </span>
+            </div>
+
+          </div>
+
+          {/* RIGHT: single full image with crossfade */}
+          {!isMobile && (
+            <div style={{
+              flex: 1,
+              position: 'relative',
+              minHeight: isTablet ? '360px' : '460px',
+              overflow: 'hidden',
+              clipPath: 'polygon(40px 0%, 100% 0%, 100% 100%, 0% 100%)',
+            }}>
+              {/* All images stacked, crossfade */}
+              {slides.map((s, i) => (
+                <img
+                  key={i}
+                  src={s.image}
+                  alt={s.subheadline}
+                  style={{
+                    position: 'absolute', inset: 0,
+                    width: '100%', height: '100%',
+                    objectFit: 'cover',
+                    opacity: i === current ? 1 : 0,
+                    transform: i === current ? 'scale(1.04)' : 'scale(1)',
+                    transition: 'opacity 0.8s ease, transform 6s ease',
+                  }}
+                />
+              ))}
+
+              {/* Dark gradient overlay */}
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 1,
+                background: 'linear-gradient(to bottom, rgba(0,18,53,0.15) 0%, rgba(0,18,53,0.55) 100%)',
+              }} />
+
+              {/* Top right orange corner accents */}
+              <div style={{ position: 'absolute', top: 0, right: 0, width: '3px', height: '30%', background: 'linear-gradient(to bottom, #FF6600, transparent)', zIndex: 2 }} />
+              <div style={{ position: 'absolute', top: 0, right: 0, width: '30%', height: '3px', background: 'linear-gradient(to left, #FF6600, transparent)', zIndex: 2 }} />
+
+              {/* Slide counter */}
+              <div style={{
+                position: 'absolute', bottom: '24px', right: '24px', zIndex: 2,
+                textAlign: 'right',
+              }}>
+                <div style={{
+                  fontFamily: 'Barlow Condensed, sans-serif',
+                  fontSize: '64px', fontWeight: '800',
+                  color: 'rgba(255,255,255,0.08)', lineHeight: 1,
+                }}>
+                  0{current + 1}
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* Mobile: single image */}
+          {isMobile && (
+            <div style={{
+              width: '100%', height: '220px',
+              position: 'relative', borderRadius: '4px',
+              overflow: 'hidden', flexShrink: 0,
+            }}>
+              {slides.map((s, i) => (
+                <img key={i} src={s.image} alt={s.subheadline} style={{
+                  position: 'absolute', inset: 0,
+                  width: '100%', height: '100%', objectFit: 'cover',
+                  opacity: i === current ? 1 : 0,
+                  transform: i === current ? 'scale(1.03)' : 'scale(1)',
+                  transition: 'opacity 0.8s ease, transform 6s ease',
+                }} />
+              ))}
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(to top, rgba(0,18,53,0.7) 0%, transparent 60%)',
+              }} />
+            </div>
+          )}
+
+        </div>
+
+        {/* Features bar */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', backgroundColor: '#000d24' }}>
+          <div style={{
+            display: 'flex', maxWidth: '1400px', margin: '0 auto', width: '100%',
+            paddingLeft: isMobile ? '0' : isTablet ? '32px' : '48px',
+            overflowX: isMobile ? 'auto' : 'visible',
+          }}>
+            {features.map((f, i) => <FeatureItem key={i} feature={f} isMobile={isMobile} />)}
+          </div>
+        </div>
+
+        {/* Scroll hint */}
+        {!isMobile && !isTablet && (
+          <div style={{ position: 'absolute', bottom: '80px', left: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+            <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', fontFamily: 'DM Sans, sans-serif', writingMode: 'vertical-rl' }}>Scroll</span>
+            <ChevronDown size={13} color="rgba(255,255,255,0.2)" style={{ animation: 'bounce 1.5s infinite' }} />
+          </div>
+        )}
+
+      </section>
+    </>
+  )
 }
 
 export default Hero
