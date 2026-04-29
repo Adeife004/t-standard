@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-      <CustomCursor /> {/* ✅ Outside everything — always visible, never affected by opacity */}
+      <CustomCursor /> 
 
       {loading && <Preloader onComplete={handleComplete} />}
 

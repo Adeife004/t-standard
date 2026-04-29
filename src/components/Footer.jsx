@@ -270,22 +270,21 @@ const Footer = () => {
               ))}
             </div>
           ) : isMobile ? (
-            // On mobile show links in a 2-col grid inside one block
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-              {Object.entries(footerLinks).map(([title, links]) => (
-                <div key={title} style={styles.linksCol}>
-                  <div style={styles.colHeader}>
-                    <span style={styles.colHeaderLine} />
-                    <h4 style={styles.colTitle}>{title}</h4>
-                  </div>
-                  <ul style={styles.linksList}>
-                    {links.map(link => (
-                      <FooterLink key={link.label} label={link.label} href={link.href} />
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px' }}>
+    {Object.entries(footerLinks).map(([title, links]) => (
+      <div key={title} style={styles.linksCol}>
+        <div style={styles.colHeader}>
+          <span style={styles.colHeaderLine} />
+          <h4 style={styles.colTitle}>{title}</h4>
+        </div>
+        <ul style={styles.linksList}>
+          {links.map(link => (
+            <FooterLink key={link.label} label={link.label} href={link.href} />
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
           ) : (
             Object.entries(footerLinks).map(([title, links]) => (
               <div key={title} style={styles.linksCol}>

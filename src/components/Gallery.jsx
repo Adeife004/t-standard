@@ -282,7 +282,7 @@ const Gallery = () => {
   const prevItem = () => setLightboxIndex(i => (i - 1 + filtered.length) % filtered.length)
   const nextItem = () => setLightboxIndex(i => (i + 1) % filtered.length)
 
-  const gridCols = isMobile ? 'repeat(2, 1fr)' : isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)'
+  const gridCols = isMobile ? 'repeat(1, 1fr)' : isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)'
 
   return (
     <section id="gallery" style={{

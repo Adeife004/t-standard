@@ -198,11 +198,15 @@ const Contact = () => {
 
         {/* Contact info cards */}
         <div style={{
-          ...styles.cardsGrid,
-          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)',
-          gap: isMobile ? '10px' : '16px',
-          marginBottom: isMobile ? '36px' : '56px',
-        }}>
+  ...styles.cardsGrid,
+  gridTemplateColumns: isMobile
+    ? '1fr'
+    : isTablet
+    ? 'repeat(2, 1fr)'
+    : 'repeat(4, 1fr)',
+  gap: isMobile ? '10px' : '16px',
+  marginBottom: isMobile ? '36px' : '56px',
+}}>
           {contactInfo.map((info) => (
             <ContactCard key={info.label} info={info} isMobile={isMobile} />
           ))}
