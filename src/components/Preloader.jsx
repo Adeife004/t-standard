@@ -17,10 +17,8 @@ const Preloader = ({ onComplete }) => {
 
   useEffect(() => {
     if (progress === 100) {
-      // Short pause then trigger wipe
       setTimeout(() => {
         setWiping(true)
-        // Tell App to start revealing page underneath
         onComplete()
       }, 400)
     }
@@ -31,7 +29,6 @@ const Preloader = ({ onComplete }) => {
       position: 'fixed',
       inset: 0,
       zIndex: 99999,
-      // Wipe upward: shrinks from bottom, revealing page beneath
       transform: wiping ? 'translateY(-100%)' : 'translateY(0)',
       transition: wiping ? 'transform 0.85s cubic-bezier(0.76, 0, 0.24, 1)' : 'none',
     }}>
@@ -40,7 +37,7 @@ const Preloader = ({ onComplete }) => {
       <div style={{
         position: 'absolute', inset: 0,
         backgroundColor: '#001235',
-        overflow: 'hidden',
+        overflow: 'hidden', 
       }}>
 
         {/* Background grid */}
@@ -63,16 +60,25 @@ const Preloader = ({ onComplete }) => {
           transition: 'height 0.1s ease',
         }} />
 
-        {/* Center content */}
+        {/* Center content — scrollable on very short screens */}
         <div style={{
           position: 'absolute', inset: 0,
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          gap: '32px', padding: '0 24px',
+          gap: 'clamp(16px, 3vh, 32px)', 
+          padding: '60px 24px',           
+          overflowY: 'auto',              
+          boxSizing: 'border-box',
         }}>
 
-          {/* Logo */}
-          <div style={{ position: 'relative', width: '100px', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {/* Logo — responsive size */}
+          <div style={{
+            position: 'relative',
+            width: 'clamp(70px, 15vw, 100px)',   
+            height: 'clamp(70px, 15vw, 100px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
             <div style={{
               position: 'absolute', inset: '-12px', borderRadius: '50%',
               border: '2px solid rgba(255,102,0,0.5)',
@@ -81,14 +87,15 @@ const Preloader = ({ onComplete }) => {
               transition: 'all 0.1s ease',
             }} />
             <div style={{
-              width: '100px', height: '100px', borderRadius: '50%',
+              width: '100%', height: '100%', borderRadius: '50%',
               backgroundColor: '#FF6600',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 0 40px rgba(255,102,0,0.4)',
             }}>
               <span style={{
                 fontFamily: 'Barlow Condensed, sans-serif',
-                fontSize: '36px', fontWeight: '900',
+                fontSize: 'clamp(22px, 5vw, 36px)', 
+                fontWeight: '900',
                 color: '#fff', letterSpacing: '2px',
               }}>ts</span>
             </div>
@@ -98,19 +105,27 @@ const Preloader = ({ onComplete }) => {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
             <h1 style={{
               fontFamily: 'Barlow Condensed, sans-serif',
-              fontSize: 'clamp(32px, 8vw, 56px)',
+              fontSize: 'clamp(28px, 8vw, 56px)',
               fontWeight: '800', color: '#fff',
-              letterSpacing: '6px', margin: 0, lineHeight: 1,
+              letterSpacing: 'clamp(2px, 1.5vw, 6px)', 
+              margin: 0, lineHeight: 1,
+              textAlign: 'center',
             }}>T-STANDARD</h1>
             <p style={{
-              fontSize: '11px', color: 'rgba(255,255,255,0.4)',
+              fontSize: 'clamp(9px, 2vw, 11px)',
+              color: 'rgba(255,255,255,0.4)',
               letterSpacing: '3px', textTransform: 'uppercase',
               fontFamily: 'DM Sans, sans-serif', margin: 0,
+              textAlign: 'center',
             }}>Premium Interiors and Security</p>
           </div>
 
           {/* Progress bar */}
-          <div style={{ width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{
+            width: '100%', maxWidth: '400px',
+            display: 'flex', flexDirection: 'column', gap: '10px',
+            flexShrink: 0,
+          }}>
             <div style={{
               width: '100%', height: '2px',
               backgroundColor: 'rgba(255,255,255,0.08)',
@@ -146,8 +161,14 @@ const Preloader = ({ onComplete }) => {
             </div>
           </div>
 
-          {/* Service tags */}
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {/* Service tags — wraps cleanly on mobile */}
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(10px, 3vw, 20px)',  
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            maxWidth: '320px',              
+          }}>
             {['Security Doors', 'Interiors', 'Kitchens', 'Training'].map((item, i) => (
               <div key={item} style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
@@ -163,7 +184,7 @@ const Preloader = ({ onComplete }) => {
                 <span style={{
                   fontSize: '11px', color: 'rgba(255,255,255,0.5)',
                   letterSpacing: '1px', fontFamily: 'DM Sans, sans-serif',
-                  textTransform: 'uppercase',
+                  textTransform: 'uppercase', whiteSpace: 'nowrap', 
                 }}>{item}</span>
               </div>
             ))}
@@ -171,14 +192,15 @@ const Preloader = ({ onComplete }) => {
 
         </div>
 
-        {/* Bottom location tag */}
+        {/* Bottom location tag — hidden on very short screens to avoid overlap */}
         <div style={{
-          position: 'absolute', bottom: '32px', left: '50%',
+          position: 'absolute', bottom: '24px', left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex', alignItems: 'center', gap: '8px',
           fontSize: '11px', color: 'rgba(255,255,255,0.25)',
           letterSpacing: '2px', fontFamily: 'DM Sans, sans-serif',
           textTransform: 'uppercase', whiteSpace: 'nowrap',
+          opacity: 'var(--show-location, 1)',
         }}>
           <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#FF6600', display: 'block', flexShrink: 0 }} />
           Isheri Oshun, Lagos, Nigeria
@@ -186,7 +208,7 @@ const Preloader = ({ onComplete }) => {
 
       </div>
 
-      {/* Orange wipe trailing edge — slides up just after the main panel */}
+      {/* Orange wipe trailing edge */}
       <div style={{
         position: 'absolute',
         bottom: wiping ? '100%' : '-8px',
@@ -195,6 +217,13 @@ const Preloader = ({ onComplete }) => {
         backgroundColor: '#FF6600',
         transition: wiping ? 'bottom 0.85s cubic-bezier(0.76, 0, 0.24, 1)' : 'none',
       }} />
+
+      {/* CSS to hide location tag on very short screens */}
+      <style>{`
+        @media (max-height: 500px) {
+          [style*="--show-location"] { --show-location: 0 !important; }
+        }
+      `}</style>
 
     </div>
   )

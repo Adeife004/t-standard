@@ -166,6 +166,9 @@ const features = [
   { icon: GraduationCap, label: 'Vocational', sub: 'Training' },
 ]
 
+// ✅ Pads any number correctly: 1 → "01", 16 → "16"
+const pad = (n) => String(n).padStart(2, '0')
+
 const HoverButton = ({ href, children, primary, fullWidth }) => {
   const [hovered, setHovered] = useState(false)
   return (
@@ -244,31 +247,6 @@ const Hero = () => {
   const [current, setCurrent] = useState(0)
   const [animating, setAnimating] = useState(false)
 
-  // const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 })
-  // const [followerPos, setFollowerPos] = useState({ x: -100, y: -100 })
-  // const targetRef = useRef({ x: -100, y: -100 })
-  // const followerRef = useRef({ x: -100, y: -100 })
-  // const frameRef = useRef(null)
-
-  // useEffect(() => {
-  //   const onMove = (e) => {
-  //     setCursorPos({ x: e.clientX, y: e.clientY })
-  //     targetRef.current = { x: e.clientX, y: e.clientY }
-  //   }
-  //   window.addEventListener('mousemove', onMove)
-  //   const loop = () => {
-  //     followerRef.current.x += (targetRef.current.x - followerRef.current.x) * 0.11
-  //     followerRef.current.y += (targetRef.current.y - followerRef.current.y) * 0.11
-  //     setFollowerPos({ x: followerRef.current.x, y: followerRef.current.y })
-  //     frameRef.current = requestAnimationFrame(loop)
-  //   }
-  //   frameRef.current = requestAnimationFrame(loop)
-  //   return () => {
-  //     window.removeEventListener('mousemove', onMove)
-  //     cancelAnimationFrame(frameRef.current)
-  //   }
-  // }, [])
-
   useEffect(() => {
     const timer = setInterval(() => {
       setAnimating(true)
@@ -290,6 +268,14 @@ const Hero = () => {
 
   return (
     <>
+      {/* ✅ Scrollbar hiding for features bar on mobile */}
+      <style>{`
+        .features-bar::-webkit-scrollbar { display: none; }
+        .features-bar { -ms-overflow-style: none; scrollbar-width: none; }
+        .dots-row::-webkit-scrollbar { display: none; }
+        .dots-row { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
       <section id="home" style={{
         minHeight: '100vh',
         backgroundColor: '#001235',
@@ -336,7 +322,7 @@ const Hero = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            gap: '20px',
+            gap: isMobile ? '14px' : '20px', // ✅ tighter gap on mobile
             paddingRight: isMobile ? '0' : isTablet ? '28px' : '52px',
             position: 'relative',
             zIndex: 1,
@@ -371,6 +357,10 @@ const Hero = () => {
               fontSize: '11px', fontWeight: '600', letterSpacing: '2px',
               textTransform: 'uppercase', fontFamily: 'DM Sans, sans-serif',
               width: 'fit-content',
+              maxWidth: '100%',           // ✅ won't overflow its container
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
               opacity: animating ? 0 : 1,
               transform: animating ? 'translateY(-8px)' : 'translateY(0)',
               transition: 'all 0.4s ease',
@@ -383,7 +373,8 @@ const Hero = () => {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <h1 style={{
                 fontFamily: 'Barlow Condensed, sans-serif',
-                fontSize: isMobile ? '56px' : isTablet ? '68px' : 'clamp(60px, 6vw, 88px)',
+                // ✅ clamp on mobile so very long headlines don't overflow
+                fontSize: isMobile ? 'clamp(36px, 12vw, 56px)' : isTablet ? '68px' : 'clamp(60px, 6vw, 88px)',
                 fontWeight: '800', color: '#FF6600',
                 lineHeight: 0.88, letterSpacing: '-1px', margin: 0,
                 opacity: animating ? 0 : 1,
@@ -392,7 +383,8 @@ const Hero = () => {
               }}>{slide.headline}</h1>
               <h2 style={{
                 fontFamily: 'Barlow Condensed, sans-serif',
-                fontSize: isMobile ? '30px' : isTablet ? '40px' : 'clamp(32px, 3.2vw, 52px)',
+                // ✅ same — clamp prevents overflow on narrow phones
+                fontSize: isMobile ? 'clamp(20px, 6vw, 30px)' : isTablet ? '40px' : 'clamp(32px, 3.2vw, 52px)',
                 fontWeight: '700', color: '#fff',
                 lineHeight: 1.05, letterSpacing: '2px', margin: 0,
                 opacity: animating ? 0 : 1,
@@ -404,7 +396,7 @@ const Hero = () => {
             {/* Description */}
             <p style={{
               color: 'rgba(255,255,255,0.6)',
-              fontSize: isMobile ? '14px' : '15px',
+              fontSize: isMobile ? '13px' : '15px',
               lineHeight: 1.75, fontFamily: 'DM Sans, sans-serif', fontWeight: '300',
               maxWidth: '400px', margin: 0,
               opacity: animating ? 0 : 1,
@@ -443,26 +435,38 @@ const Hero = () => {
             </div>
 
             {/* Dots + counter */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+              {/* ✅ dots scroll horizontally on mobile instead of wrapping onto multiple lines */}
+              <div
+                className="dots-row"
+                style={{
+                  display: 'flex', gap: '5px', alignItems: 'center',
+                  overflowX: 'auto',
+                  flexShrink: 1,
+                  minWidth: 0,
+                  paddingBottom: '2px', // stops clip on dot bottom
+                }}
+              >
                 {slides.map((_, i) => (
                   <button key={i} onClick={() => goTo(i)} style={{
                     height: '5px',
-                    width: i === current ? '24px' : '5px',
+                    width: i === current ? '20px' : '5px',
                     borderRadius: '3px', border: 'none', padding: 0, cursor: 'pointer',
                     backgroundColor: i === current ? '#FF6600' : 'rgba(255,255,255,0.2)',
                     transition: 'all 0.3s ease',
+                    flexShrink: 0, // ✅ dots never compress
                   }} />
                 ))}
               </div>
-              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '2px', whiteSpace: 'nowrap' }}>
-                0{current + 1} / 0{slides.length}
+              {/* ✅ pad() handles any slide count correctly — no more "016" style bugs */}
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '2px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                {pad(current + 1)} / {pad(slides.length)}
               </span>
             </div>
 
           </div>
 
-          {/* RIGHT: single full image with crossfade */}
+          {/* RIGHT: images with crossfade */}
           {!isMobile && (
             <div style={{
               flex: 1,
@@ -471,7 +475,6 @@ const Hero = () => {
               overflow: 'hidden',
               clipPath: 'polygon(40px 0%, 100% 0%, 100% 100%, 0% 100%)',
             }}>
-              {/* All images stacked, crossfade */}
               {slides.map((s, i) => (
                 <img
                   key={i}
@@ -487,35 +490,26 @@ const Hero = () => {
                   }}
                 />
               ))}
-
-              {/* Dark gradient overlay */}
               <div style={{
                 position: 'absolute', inset: 0, zIndex: 1,
                 background: 'linear-gradient(to bottom, rgba(0,18,53,0.15) 0%, rgba(0,18,53,0.55) 100%)',
               }} />
-
-              {/* Top right orange corner accents */}
               <div style={{ position: 'absolute', top: 0, right: 0, width: '3px', height: '30%', background: 'linear-gradient(to bottom, #FF6600, transparent)', zIndex: 2 }} />
               <div style={{ position: 'absolute', top: 0, right: 0, width: '30%', height: '3px', background: 'linear-gradient(to left, #FF6600, transparent)', zIndex: 2 }} />
-
-              {/* Slide counter */}
-              <div style={{
-                position: 'absolute', bottom: '24px', right: '24px', zIndex: 2,
-                textAlign: 'right',
-              }}>
+              <div style={{ position: 'absolute', bottom: '24px', right: '24px', zIndex: 2, textAlign: 'right' }}>
                 <div style={{
                   fontFamily: 'Barlow Condensed, sans-serif',
                   fontSize: '64px', fontWeight: '800',
                   color: 'rgba(255,255,255,0.08)', lineHeight: 1,
                 }}>
-                  0{current + 1}
+                  {/* ✅ consistent with counter format */}
+                  {pad(current + 1)}
                 </div>
               </div>
-
             </div>
           )}
 
-          {/* Mobile: single image */}
+          {/* Mobile image */}
           {isMobile && (
             <div style={{
               width: '100%', height: '220px',
@@ -542,16 +536,19 @@ const Hero = () => {
 
         {/* Features bar */}
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', backgroundColor: '#000d24' }}>
-          <div style={{
-            display: 'flex', maxWidth: '1400px', margin: '0 auto', width: '100%',
-            paddingLeft: isMobile ? '0' : isTablet ? '32px' : '48px',
-            overflowX: isMobile ? 'auto' : 'visible',
-          }}>
+          <div
+            className="features-bar" // ✅ scrollbar hidden via <style> above
+            style={{
+              display: 'flex', maxWidth: '1400px', margin: '0 auto', width: '100%',
+              paddingLeft: isMobile ? '0' : isTablet ? '32px' : '48px',
+              overflowX: isMobile ? 'auto' : 'visible',
+            }}
+          >
             {features.map((f, i) => <FeatureItem key={i} feature={f} isMobile={isMobile} />)}
           </div>
         </div>
 
-        {/* Scroll hint */}
+        {/* Scroll hint — desktop only */}
         {!isMobile && !isTablet && (
           <div style={{ position: 'absolute', bottom: '80px', left: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
             <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', fontFamily: 'DM Sans, sans-serif', writingMode: 'vertical-rl' }}>Scroll</span>
